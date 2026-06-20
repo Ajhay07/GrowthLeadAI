@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Search {
+  id        String   @id @default(cuid())
+  city      String
+  category  String
+  createdAt DateTime @default(now())
+  leads     Lead[]
+}
+
+model Lead {
+  id          String @id @default(cuid())
+  searchId    String
+  search      Search @relation(fields: [searchId], references: [id])
+
+  placeId     String
+  name        String
+  category    String
+  address     String
+  phone       String?
+  website     String?
+  rating      Float?
+  reviewCount Int?
+
+  hasWebsite           Boolean
+  websiteQualityScore  Int?
+  growthScore          Int
+  digitalPresenceScore Int
+  opportunityScore     Int
+
+  aiInsight    String?
+  auditDetails String?
+
+  createdAt DateTime @default(now())
+
+  @@index([searchId])
+}
